@@ -1,0 +1,9 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "code-runner.executorMap": {
+        "python": "/Users/vsahare/Library/CloudStorage/OneDrive-Cisco/Padhai/UdemyLangChain/langchain-course/.venv/bin/python -u"
+    },
+    "cSpell.words": [
+        "dotenv"
+    ]
+}
