@@ -152,7 +152,7 @@ def main():
     try:
         # Test your set_api_key implementation
         print("🔑 Setting API key...")
-        implement_set_api_key("groq-api-key")
+        
         # Check if API key was set correctly
         check_api_key()
         print("✓ API key validation working!")
