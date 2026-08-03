@@ -17,6 +17,7 @@ dependencies = [
     "langchain-unstructured>=1.0.1",
     "langchainhub>=0.1.21",
     "python-dotenv>=1.2.2",
+    "streamlit>=1.60.0",
     "truststore>=0.10.4",
     "unstructured>=0.25.0",
 ]
