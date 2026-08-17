@@ -1,2 +1,2 @@
-def main() -> None:
-    print("Hello from nodes!")
+def hello() -> str:
+    return "Hello from nodes!"

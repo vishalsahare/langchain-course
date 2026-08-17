@@ -26,8 +26,4 @@ dependencies = [
 
 [tool.uv.workspace]
 members = [
-    "graph",
-    "chains",
-    "graph/nodes",
-    "chains/tests",
 ]
