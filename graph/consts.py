@@ -1,0 +1,5 @@
+"""Constants used by the retrieval graph."""
+RETRIEVE = "retrieve"
+GRADE_DOCUMENTS = "grade_documents"
+GENERATE = "generate"
+WEBSEARCH = "websearch"

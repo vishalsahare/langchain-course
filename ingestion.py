@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
+
 load_dotenv(override=True)
 import os
+from pathlib import Path
+
 os.environ.setdefault("USER_AGENT", "langchain-course/0.1")
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
@@ -23,22 +26,21 @@ docs = [WebBaseLoader(url).load() for url in urls]
 docs_list = [item for sublist in docs for item in sublist]
 
 text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    chunk_size = 250, chunk_overlap = 0
+    chunk_size=250, chunk_overlap=0
 )
 
 doc_splits = text_splitter.split_documents(docs_list)
 
 embeddings = OpenAIEmbeddings()
+persist_directory = Path(__file__).resolve().parent / ".chroma"
 
-# Chroma.from_documents(
-#     documents=doc_splits,
-#     embedding=embeddings,
-#     collection_name="rag-chroma",
-#     persist_directory="./.chroma"
-# )
-
-retriever = Chroma(
+vector_store = Chroma(
     collection_name="rag-chroma",
-    persist_directory="./.chroma",
+    persist_directory=str(persist_directory),
     embedding_function=embeddings,
-).as_retriever()
+)
+
+if not vector_store.get(limit=1)["ids"]:
+    vector_store.add_documents(doc_splits)
+
+retriever = vector_store.as_retriever()
