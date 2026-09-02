@@ -42,7 +42,7 @@ include = ["graph*"]
 pythonpath = [
     ".",
 ]
-testpaths = ["graph/chains/tests/src/tests"]
+testpaths = ["graph/chains/tests"]
 markers = [
     "integration: tests that call external services",
 ]

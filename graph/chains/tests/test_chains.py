@@ -4,13 +4,14 @@ import pytest
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
+if not os.getenv("OPENAI_API_KEY"):
+    pytest.skip("OPENAI_API_KEY is required for this integration test", allow_module_level=True)
+
 from pprint import pprint
 from graph.chains.retrieval_grader import retrieval_grader
+from graph.chains.hallucination_grader import hallucination_grader
 from graph.chains.generation import generation_chain
 from ingestion import retriever
-
-if not os.getenv("OPENAI_API_KEY"):
-    pytest.skip("OPENAI_API_KEY is required for this integration test")
 
 
 @pytest.mark.integration
@@ -45,3 +46,20 @@ def test_generation_chain():
     docs = retriever.invoke(question)
     result = generation_chain.invoke({"question": question, "context": docs})
     pprint(result)
+
+
+@pytest.mark.integration
+def test_hallucination_grader_yes():
+    question = "What are generative agents?"
+    docs = retriever.invoke(question)
+    generation = generation_chain.invoke({"question": question, "context": docs})
+    result = hallucination_grader.invoke({"documents": docs, "generation": generation})
+    assert result.binary_score == "yes"
+
+
+def test_hallucination_grader_no():
+    question = "agent memory"
+    docs = retriever.invoke(question)
+    
+    result = hallucination_grader.invoke({"documents": docs, "generation": "In order to make pizza we need to first start with the dough",})
+    assert result.binary_score == "no"
