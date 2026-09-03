@@ -10,6 +10,7 @@ if not os.getenv("OPENAI_API_KEY"):
 from pprint import pprint
 from graph.chains.retrieval_grader import retrieval_grader
 from graph.chains.hallucination_grader import hallucination_grader
+from graph.chains.router import router
 from graph.chains.generation import generation_chain
 from ingestion import retriever
 
@@ -63,3 +64,13 @@ def test_hallucination_grader_no():
     
     result = hallucination_grader.invoke({"documents": docs, "generation": "In order to make pizza we need to first start with the dough",})
     assert result.binary_score == "no"
+
+def test_router_to_vectorstore() -> None:
+    question = "What are generative agents?"
+    result = router.invoke({"question": question})
+    assert result.datasource == "vectorstore"
+
+def test_router_to_websearch() -> None:
+    question = "How to make pizza"
+    result = router.invoke({"question": question})
+    assert result.datasource == "websearch"

@@ -12,12 +12,14 @@ web_search_tool = TavilySearch(max_results=3)
 def web_search(state: GraphState) -> Dict[str, Any]:
     print("--- WEB SEARCH ---")
     question = state["question"]
-    documents = state["documents"]
+    documents = list(state.get("documents") or [])
 
-    tavily_results = web_search_tool.invoke(question)['results']
-    joined_tavily_results = "\n".join([tavily_result["content"] for tavily_result in tavily_results])
+    tavily_results = web_search_tool.invoke(question).get("results", [])
+    joined_tavily_results = "\n".join(
+        tavily_result["content"] for tavily_result in tavily_results
+    )
     web_results = Document(page_content=joined_tavily_results)
-    
+
     documents.append(web_results)
 
     return {"documents": documents, "question": question}
